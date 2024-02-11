@@ -1,6 +1,7 @@
 package com.atguigu.spzx.manager.service.impl;
 
 import com.atguigu.spzx.manager.mapper.SysRoleMapper;
+import com.atguigu.spzx.manager.mapper.SysRoleUserMapper;
 import com.atguigu.spzx.manager.service.SysRoleService;
 import com.atguigu.spzx.model.dto.system.SysRoleDto;
 import com.atguigu.spzx.model.entity.system.SysRole;
@@ -9,7 +10,9 @@ import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @projectName: spzx-parent
@@ -22,6 +25,9 @@ import java.util.List;
 public class SysRoleServiceImpl implements SysRoleService {
     @Autowired
     private SysRoleMapper sysRoleMapper;
+    
+    @Autowired
+    private SysRoleUserMapper sysRoleUserMapper;
     /**
      * 从数据库中，按照角色名称查询数据，并进行分页
      * @param sysRoleDto
@@ -55,8 +61,29 @@ public class SysRoleServiceImpl implements SysRoleService {
         sysRoleMapper.update(sysRole);
     }
 
+    /**
+     * 删除角色方法
+     * @param roleId
+     */
     @Override
     public void deleteById(long roleId) {
         sysRoleMapper.delete(roleId);
+    }
+
+    /**
+     * 
+     * @return
+     */
+    @Override
+    public Map<String, Object> findAll(Long userId) {
+        //map用来储存角色信息
+        Map<String,Object> map = new HashMap<>();
+        //1.查询所有角色
+        List<SysRole> roleList = sysRoleMapper.findAll();
+        map.put("allRolesList",roleList);
+        //2.根据userId查询分配过的角色id列表
+        List<Long> roleIds = sysRoleUserMapper.selectRoleIdsByUserId(userId);
+        map.put("sysUserRoles",roleIds);
+        return map;
     }
 }

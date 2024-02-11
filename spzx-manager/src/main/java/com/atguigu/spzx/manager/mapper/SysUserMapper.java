@@ -8,8 +8,10 @@ import java.util.List;
 
 @Mapper
 public interface SysUserMapper {
-    public abstract SysUser selectByUserName(String userName);
-
+    SysUser selectByUserName(String userName);
+    
+    SysUser selectByUserId(Long id);
+    
     List<SysUser> findByPage(SysUserDto sysUserDto);
 
     void save(SysUser sysUser);

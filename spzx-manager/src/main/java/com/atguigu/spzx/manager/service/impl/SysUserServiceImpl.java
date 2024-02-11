@@ -6,14 +6,18 @@ import com.alibaba.fastjson.JSON;
 import com.atguigu.spzx.common.exception.GuiguException;
 import com.atguigu.spzx.common.exception.LoginException;
 import com.atguigu.spzx.common.exception.UserNotFoundException;
+import com.atguigu.spzx.manager.mapper.SysRoleUserMapper;
 import com.atguigu.spzx.manager.mapper.SysUserMapper;
 import com.atguigu.spzx.manager.service.SysUserService;
+import com.atguigu.spzx.model.dto.system.AssignRoleDto;
 import com.atguigu.spzx.model.dto.system.LoginDto;
 import com.atguigu.spzx.model.dto.system.SysUserDto;
 import com.atguigu.spzx.model.entity.system.SysUser;
 import com.atguigu.spzx.model.vo.common.RedisPrefixEnum;
 import com.atguigu.spzx.model.vo.common.ResultCodeEnum;
 import com.atguigu.spzx.model.vo.system.LoginVo;
+import com.atguigu.spzx.model.vo.system.SysMenuVo;
+import com.atguigu.spzx.utils.AuthContextUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +37,9 @@ public class SysUserServiceImpl implements SysUserService {
     
     @Autowired
     private StringRedisTemplate redisTemplate;
+    
+    @Autowired
+    private SysRoleUserMapper sysRoleUserMapper;
     
 
     /**
@@ -149,20 +156,51 @@ public class SysUserServiceImpl implements SysUserService {
     /**
      * 用户修改方法
      * 用户名不能重复
+     * 根据id从数据库中查询用户名，如果用户名发生变更则进行查重
+     * 如果输入的用户名已存在则抛出异常
      * @param sysUser
      */
     @Override
     public void updateSysUser(SysUser sysUser) {
         String userName = sysUser.getUserName();
         SysUser dbSysUser = sysUserMapper.selectByUserName(userName);
-        if(ObjectUtil.isNotNull(dbSysUser)){
-            throw new GuiguException(ResultCodeEnum.USER_NAME_EXISTS);
+        Long userId = sysUser.getId();
+        String dbSysUserName = sysUserMapper.selectByUserId(userId).getUserName();
+        if(!StrUtil.equals(dbSysUserName,sysUser.getUserName())){
+            if(ObjectUtil.isNotNull(dbSysUser)){
+                throw new GuiguException(ResultCodeEnum.USER_NAME_EXISTS);
+            }
         }
         sysUserMapper.update(sysUser);
     }
 
+    /**
+     * 用户删除方法
+     * @param userId
+     */
     @Override
     public void deleteById(Integer userId) {
         sysUserMapper.delete(userId);
     }
+
+    /**
+     * 用户分配角色
+     * 1.根据userId删除用户之前分配过的角色
+     * 2.重新分配新数据
+     * @param assignRoleDto
+     */
+    @Override
+    public void doAssign(AssignRoleDto assignRoleDto) {
+        //删除原来userId分配过的所有角色
+        sysRoleUserMapper.deleteByUserId(assignRoleDto.getUserId());
+        List<Long> roleIdList = assignRoleDto.getRoleIdList();
+        //遍历得到每个角色的id,添加进当前userId对应的用户
+        for(Long roleId:roleIdList){
+            sysRoleUserMapper.doAssign(assignRoleDto.getUserId(),roleId);
+        }
+    }
+
+
+
+
 }

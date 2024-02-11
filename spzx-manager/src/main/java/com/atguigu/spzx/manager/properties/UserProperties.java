@@ -11,6 +11,10 @@ import java.util.List;
  * @className: UserProperties
  * @author: XiaoHB
  * @date: 2023/12/20 16:11
+ * 1.在applicatoin.yml中编写配置信息
+ * 2.创建配置类，添加@Data和@ConfigurationProperties注解
+ * 3.在启动类中注册配置类
+ * 4.注入并使用
  */
 
 @Data

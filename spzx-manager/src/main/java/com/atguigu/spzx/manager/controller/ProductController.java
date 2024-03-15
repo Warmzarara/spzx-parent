@@ -3,6 +3,7 @@ package com.atguigu.spzx.manager.controller;
 import com.atguigu.spzx.manager.service.ProductService;
 import com.atguigu.spzx.model.dto.product.ProductDto;
 import com.atguigu.spzx.model.entity.product.Product;
+import com.atguigu.spzx.model.entity.product.ProductSku;
 import com.atguigu.spzx.model.vo.common.Result;
 import com.atguigu.spzx.model.vo.common.ResultCodeEnum;
 import com.github.pagehelper.PageInfo;
@@ -100,4 +101,6 @@ public class ProductController {
         productService.updateStatus(id,status);
         return Result.build(null, ResultCodeEnum.SUCCESS);
     }
+
+
 }

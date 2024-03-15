@@ -3,12 +3,16 @@ package com.atguigu.spzx.manager.controller;
 import com.atguigu.spzx.common.log.annotation.Log;
 import com.atguigu.spzx.common.log.enums.OperatorType;
 import com.atguigu.spzx.manager.service.BrandService;
+import com.atguigu.spzx.manager.service.impl.BrandServiceImpl;
 import com.atguigu.spzx.model.entity.product.Brand;
 import com.atguigu.spzx.model.vo.common.Result;
 import com.atguigu.spzx.model.vo.common.ResultCodeEnum;
 import com.github.pagehelper.PageInfo;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.support.WebApplicationContextUtils;
+import org.springframework.web.servlet.support.RequestContextUtils;
 
 import java.util.List;
 
@@ -48,6 +52,12 @@ public class BrandController {
     public Result save(@RequestBody Brand brand){
         brandService.save(brand);
         return Result.build(null, ResultCodeEnum.SUCCESS);
+    }
+
+    // TODO: 2024/3/2 测试使用工具类获取Bean容器 
+    public void getBean(HttpServletRequest request){
+        RequestContextUtils.findWebApplicationContext(request).getBean("brandServiceImpl");
+        WebApplicationContextUtils.getWebApplicationContext(request.getServletContext()).getBean(BrandServiceImpl.class);
     }
 
     // TODO: 2024/2/1 修改、删除功能未编写

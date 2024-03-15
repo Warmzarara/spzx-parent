@@ -1,0 +1,8 @@
+com\atguigu\spzx\product\service\impl\ProductServiceImpl.class
+com\atguigu\spzx\product\controller\IndexController.class
+com\atguigu\spzx\product\ProductApplication.class
+com\atguigu\spzx\product\mapper\ProductSkuMapper.class
+com\atguigu\spzx\product\service\ProductService.class
+com\atguigu\spzx\product\service\impl\CategoryServiceImpl.class
+com\atguigu\spzx\product\service\CategoryService.class
+com\atguigu\spzx\product\mapper\CategoryMapper.class

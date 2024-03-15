@@ -55,6 +55,7 @@
         and is_deleted = 0
         order by id desc
     </select>
+    
 
     <update id="updateById" >
         update product_sku set

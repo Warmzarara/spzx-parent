@@ -14,4 +14,6 @@ public interface ProductSkuMapper {
     void updateById(ProductSku e);
 
     void deleteByProductId(Long id);
+    
+
 }

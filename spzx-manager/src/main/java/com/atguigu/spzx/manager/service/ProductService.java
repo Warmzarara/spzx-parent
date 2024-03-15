@@ -2,6 +2,7 @@ package com.atguigu.spzx.manager.service;
 
 import com.atguigu.spzx.model.dto.product.ProductDto;
 import com.atguigu.spzx.model.entity.product.Product;
+import com.atguigu.spzx.model.entity.product.ProductSku;
 import com.github.pagehelper.PageInfo;
 
 public interface ProductService {
@@ -18,4 +19,5 @@ public interface ProductService {
     void updateAuditStatus(Long id, Integer auditStatus);
 
     void updateStatus(Long id, Integer status);
+
 }

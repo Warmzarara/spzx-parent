@@ -6,6 +6,7 @@ import lombok.Data;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @projectName: spzx-parent
@@ -42,5 +43,8 @@ public class OrderInfo extends BaseEntity {
     private String remark;
     private Date cancelTime;
     private String cancelReason;
+
+    @Schema(description = "订单项列表")
+    private List<OrderItem> orderItemList;
 
 }
